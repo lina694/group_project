@@ -33,6 +33,7 @@ dependencies:
 
       # Database
   sqflite: ^2.3.0
+  sqflite_common_ffi: ^2.3.0+1
   path: ^1.8.3
 
     # Encrypted SharedPreferences
@@ -64,6 +65,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  #generate: true  # Add this line
+
+
+flutter_intl:
+  enabled: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:
