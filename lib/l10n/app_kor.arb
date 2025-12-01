@@ -1,0 +1,19 @@
+{
+  "@@locale": "ko",
+  "appTitle": "판매용 보트",
+  "instructions": "+ 버튼을 눌러 보트를 추가하세요.\n목록을 눌러 수정 또는 삭제할 수 있습니다.",
+  "addBoat": "보트 추가",
+  "editBoat": "보트 수정",
+  "yearBuilt": "제작 연도",
+  "length": "길이",
+  "powerType": "동력 유형",
+  "price": "가격",
+  "address": "주소",
+  "submit": "등록",
+  "update": "수정",
+  "delete": "삭제",
+  "copyPrevious": "이전 항목 불러오기?",
+  "copyPreviousContent": "이전 보트 입력 정보를 불러올까요?",
+  "yes": "예",
+  "no": "아니오"
+}
