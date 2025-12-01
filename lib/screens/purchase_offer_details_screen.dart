@@ -16,7 +16,7 @@ class PurchaseOfferDetailsScreen extends StatefulWidget {
     this.isEmbedded = false,
     this.onSaved,
   });
-
+  //
   @override
   State<PurchaseOfferDetailsScreen> createState() =>
       _PurchaseOfferDetailsScreenState();
