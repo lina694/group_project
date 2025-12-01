@@ -1,7 +1,9 @@
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/purchase_offer.dart';
+
 
 /// Database helper for managing purchase offer records.
 ///
@@ -37,24 +39,17 @@ class PurchaseOfferDatabaseHelper {
   /// Uses the same path and name as the Car helper: `group_project.db`.
   /// Also ensures that the `purchase_offers` table exists.
   Future<Database> _initDatabase() async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'group_project.db');
+    String path = join(await getDatabasesPath(), 'group_project.db');
 
-    final db = await openDatabase(
+    return await openDatabase(
       path,
       version: 1,
-      // We don't define onCreate here because another helper (Car) may already
-      // have created the DB. Instead, we ensure the table exists after open.
+      onCreate: _onCreate,
     );
-
-    // Make sure our table exists even if the DB was created earlier.
-    await _createTableIfNotExists(db);
-
-    return db;
   }
 
   /// Creates the `purchase_offers` table if it does not exist yet.
-  Future<void> _createTableIfNotExists(Database db) async {
+  Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS purchase_offers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -77,7 +72,7 @@ class PurchaseOfferDatabaseHelper {
   /// Returns the ID of the newly inserted row.
   Future<int> insertOffer(PurchaseOffer offer) async {
     final db = await database;
-    final id = await db.insert('purchase_offers', offer.toMap());
+    final id = await db.insert('purchase_offer', offer.toMap());
     return id;
   }
 
@@ -87,7 +82,7 @@ class PurchaseOfferDatabaseHelper {
   Future<List<PurchaseOffer>> getAllOffers() async {
     final db = await database;
     final List<Map<String, dynamic>> maps =
-    await db.query('purchase_offers', orderBy: 'id DESC');
+    await db.query('purchase_offer', orderBy: 'id DESC');
 
     return maps.map((map) => PurchaseOffer.fromMap(map)).toList();
   }
@@ -102,7 +97,7 @@ class PurchaseOfferDatabaseHelper {
 
     final db = await database;
     return db.update(
-      'purchase_offers',
+      'purchase_offer',
       offer.toMap(),
       where: 'id = ?',
       whereArgs: [offer.id],
@@ -115,7 +110,7 @@ class PurchaseOfferDatabaseHelper {
   Future<int> deleteOffer(int id) async {
     final db = await database;
     return db.delete(
-      'purchase_offers',
+      'purchase_offer',
       where: 'id = ?',
       whereArgs: [id],
     );
