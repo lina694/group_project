@@ -20,13 +20,13 @@ class BoatApp extends StatelessWidget {
 
       // Localization
       localizationsDelegates: const [
-        AppLocalizations.delegate,                // ✔ FIXED
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
 
-      supportedLocales: AppLocalizations.supportedLocales, // ✔ FIXED
+      supportedLocales: AppLocalizations.supportedLocales,
 
       home: const BoatListPage(),
     );

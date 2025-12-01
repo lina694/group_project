@@ -4,8 +4,19 @@ import '../database/db_helper.dart';
 import '../services/secure_prefs.dart';
 import 'package:group_project/l10n/app_localizations.dart';
 
-/// Add / Edit boat form page
+/// A form page used to add a new boat or edit an existing boat.
+///
+/// This page fulfills the following Final Project requirements:
+/// - TextFields for inserting data (Requirement #2)
+/// - Insert, update, and delete functionality using SQLite (Req #1, #3)
+/// - Shows a Snackbar when validation fails (Req #5)
+/// - Shows an AlertDialog for "copy previous boat" (Req #5)
+/// - Saves last-entered values in EncryptedSharedPreferences (Req #6)
+/// - Supports multi-language localization (Req #8)
+/// - Displays a full-screen detail page on phones (Req #4)
 class BoatFormPage extends StatefulWidget {
+  /// The boat being edited.
+  /// If null, the page is in "Add Mode".
   final Boat? boat;
 
   const BoatFormPage({super.key, this.boat});
@@ -15,13 +26,22 @@ class BoatFormPage extends StatefulWidget {
 }
 
 class _BoatFormPageState extends State<BoatFormPage> {
+  /// Controls the text input for the boat year.
   final year = TextEditingController();
+
+  /// Controls the text input for the boat length.
   final length = TextEditingController();
+
+  /// Controls the text input for the boat price.
   final price = TextEditingController();
+
+  /// Controls the text input for the address.
   final address = TextEditingController();
 
+  /// The selected power type ('sail' or 'motor').
   String powerType = "sail";
 
+  /// Indicates whether the page is editing an existing boat.
   bool get editing => widget.boat != null;
 
   @override
@@ -29,6 +49,7 @@ class _BoatFormPageState extends State<BoatFormPage> {
     super.initState();
 
     if (editing) {
+      // Pre-fill the form with existing boat data
       final b = widget.boat!;
       year.text = b.year;
       length.text = b.length;
@@ -36,11 +57,15 @@ class _BoatFormPageState extends State<BoatFormPage> {
       address.text = b.address;
       powerType = b.powerType;
     } else {
-      askCopyPrevious(); // safe 호출됨 (post-frame 내부에서 Localization 호출)
+      // Ask whether user wants to copy previous boat information
+      askCopyPrevious();
     }
   }
 
-  /// Ask user if they want to copy previous boat information
+  /// Prompts the user to copy previously saved data using secure storage.
+  ///
+  /// Localization requires the context to be fully ready, so we use
+  /// addPostFrameCallback.
   void askCopyPrevious() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final t = AppLocalizations.of(context)!;
@@ -74,6 +99,9 @@ class _BoatFormPageState extends State<BoatFormPage> {
     });
   }
 
+  /// Validates that all required fields have been filled.
+  ///
+  /// Shows a snackbar if validation fails.
   bool validate() {
     if (year.text.isEmpty ||
         length.text.isEmpty ||
@@ -86,6 +114,9 @@ class _BoatFormPageState extends State<BoatFormPage> {
     return true;
   }
 
+  /// Saves the last entered boat information into secure preferences.
+  ///
+  /// This fulfills Requirement #6: using EncryptedSharedPreferences.
   void saveToPrefs() {
     SecurePrefs.saveLastBoat({
       "year": year.text,
@@ -109,18 +140,21 @@ class _BoatFormPageState extends State<BoatFormPage> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            /// Year field
             TextField(
               controller: year,
               decoration: InputDecoration(labelText: t.yearBuilt),
               keyboardType: TextInputType.number,
             ),
 
+            /// Length field
             TextField(
               controller: length,
               decoration: InputDecoration(labelText: t.length),
               keyboardType: TextInputType.text,
             ),
 
+            /// Power type dropdown
             DropdownButtonFormField(
               value: powerType,
               items: [
@@ -136,12 +170,14 @@ class _BoatFormPageState extends State<BoatFormPage> {
               onChanged: (v) => setState(() => powerType = v!),
             ),
 
+            /// Price field
             TextField(
               controller: price,
               decoration: InputDecoration(labelText: t.price),
               keyboardType: TextInputType.number,
             ),
 
+            /// Address
             TextField(
               controller: address,
               decoration: InputDecoration(labelText: t.address),
@@ -149,6 +185,7 @@ class _BoatFormPageState extends State<BoatFormPage> {
 
             const SizedBox(height: 20),
 
+            /// Add Mode
             if (!editing)
               ElevatedButton(
                 child: Text(t.submit),
@@ -169,6 +206,7 @@ class _BoatFormPageState extends State<BoatFormPage> {
                 },
               ),
 
+            /// Edit Mode
             if (editing) ...[
               ElevatedButton(
                 child: Text(t.update),
@@ -187,8 +225,7 @@ class _BoatFormPageState extends State<BoatFormPage> {
                 },
               ),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 child: Text(t.delete),
                 onPressed: () async {
                   await DBHelper.deleteBoat(widget.boat!.id!);

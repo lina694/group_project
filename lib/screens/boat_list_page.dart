@@ -5,7 +5,8 @@ import '../widgets/boat_tile.dart';
 import 'boat_form_page.dart';
 import 'package:group_project/l10n/app_localizations.dart';
 
-/// Main page showing list of boats
+/// Displays a scrollable list of all boats saved in the database.
+/// This is the main page of the Boats module.
 class BoatListPage extends StatefulWidget {
   const BoatListPage({super.key});
 
@@ -14,8 +15,10 @@ class BoatListPage extends StatefulWidget {
 }
 
 class _BoatListPageState extends State<BoatListPage> {
+  /// A list containing all boats retrieved from the database.
   List<Boat> boats = [];
 
+  /// Loads all boats from the database and refreshes the UI.
   Future<void> loadBoats() async {
     final data = await DBHelper.getBoats();
     setState(() => boats = data);
@@ -34,6 +37,8 @@ class _BoatListPageState extends State<BoatListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(t.appTitle),
+
+        /// ActionBar info button requirement.
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline),
@@ -46,10 +51,11 @@ class _BoatListPageState extends State<BoatListPage> {
                 ),
               );
             },
-          )
+          ),
         ],
       ),
 
+      /// List of boats
       body: ListView.builder(
         itemCount: boats.length,
         itemBuilder: (_, index) {
@@ -62,6 +68,8 @@ class _BoatListPageState extends State<BoatListPage> {
                   builder: (_) => BoatFormPage(boat: boat),
                 ),
               );
+
+              /// Refresh list after returning
               loadBoats();
             },
             child: BoatTile(boat: boat),
@@ -69,6 +77,7 @@ class _BoatListPageState extends State<BoatListPage> {
         },
       ),
 
+      /// Floating button to add a new boat
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {
