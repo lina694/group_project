@@ -31,17 +31,22 @@ dependencies:
   flutter:
     sdk: flutter
 
-      # Database
+  # Internationalization support
+  flutter_localizations:
+    sdk: flutter
+  intl: any   # or a specific version if you want
+
+  # Database
   sqflite: ^2.3.0
   sqflite_common_ffi: ^2.3.0+1
   path: ^1.8.3
 
-    # Encrypted SharedPreferences
+  # Encrypted SharedPreferences
   flutter_secure_storage: ^9.0.0
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # iOS style icons
   cupertino_icons: ^1.0.8
+
 
 dev_dependencies:
   flutter_test:
