@@ -9,6 +9,42 @@ class AppLocalizationsFa extends AppLocalizations {
   AppLocalizationsFa([String locale = 'fa']) : super(locale);
 
   @override
+  String get customersTitle => 'مشتریان';
+
+  @override
+  String get helpTitle => 'راهنما - لیست مشتریان';
+
+  @override
+  String get helpContent =>
+      'این صفحه لیست تمام مشتریان را نشان می‌دهد.\n\n- برای دیدن جزئیات یا ویرایش، روی یک مشتری ضربه بزنید.\n- برای افزودن مشتری جدید، روی دکمه \"+\" ضربه بزنید.';
+
+  @override
+  String get ok => 'باشه';
+
+  @override
+  String get noCustomersFound => 'هیچ مشتری یافت نشد.';
+
+  @override
+  String get addCustomerTitle => 'افزودن مشتری جدید';
+
+  @override
+  String get copyPrompt =>
+      'با فرم خالی شروع می‌کنید یا اطلاعات مشتری قبلی کپی شود؟';
+
+  @override
+  String get blank => 'فرم خالی';
+
+  @override
+  String get copyPrevious => 'کپی قبلی';
+
+  @override
+  String get deleteDialogTitle => 'حذف مشتری';
+
+  @override
+  String get deleteDialogContent => 'آیا از حذف این مشتری مطمئن هستید؟';
+
+  @override
+  String get cancel => 'لغو';
   String get appTitle => 'Boats for Sale';
 
   @override

@@ -97,6 +97,79 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('fa'),
+  ];
+
+  /// No description provided for @customersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers'**
+  String get customersTitle;
+
+  /// No description provided for @helpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Help - Customer List'**
+  String get helpTitle;
+
+  /// No description provided for @helpContent.
+  ///
+  /// In en, this message translates to:
+  /// **'This page shows a list of all customers.\n\n- Tap a customer to see their details or edit them.\n- Tap the \"+\" button to add a new customer.'**
+  String get helpContent;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @noCustomersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No customers found.'**
+  String get noCustomersFound;
+
+  /// No description provided for @addCustomerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Customer'**
+  String get addCustomerTitle;
+
+  /// No description provided for @copyPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with a blank form or copy data from the previous customer?'**
+  String get copyPrompt;
+
+  /// No description provided for @blank.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank'**
+  String get blank;
+
+  /// No description provided for @copyPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Previous'**
+  String get copyPrevious;
+
+  /// No description provided for @deleteDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Customer'**
+  String get deleteDialogTitle;
+
+  /// No description provided for @deleteDialogContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this customer?'**
+  String get deleteDialogContent;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
     Locale('ko'),
   ];
 
@@ -172,6 +245,89 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
+  /// No description provided for @allFieldsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'All fields must have a value.'**
+  String get allFieldsRequired;
+
+  /// No description provided for @customerCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Created'**
+  String get customerCreated;
+
+  /// No description provided for @customerUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Updated'**
+  String get customerUpdated;
+
+  /// No description provided for @customerDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Deleted'**
+  String get customerDeleted;
+
+  /// No description provided for @editCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Customer'**
+  String get editCustomer;
+
+  /// No description provided for @addCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Customer'**
+  String get addCustomer;
+
+  /// No description provided for @firstName.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get firstName;
+
+  /// No description provided for @lastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get lastName;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @dob.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of Birth'**
+  String get dob;
+
+  /// No description provided for @license.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver\'s License #'**
+  String get license;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
+
+  /// No description provided for @detailsPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a customer or press + to add.'**
+  String get detailsPlaceholder;
   /// No description provided for @copyPrevious.
   ///
   /// In en, this message translates to:
@@ -208,6 +364,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
+      <String>['en', 'fa'].contains(locale.languageCode);
       <String>['en', 'fa', 'ko'].contains(locale.languageCode);
 
   @override
