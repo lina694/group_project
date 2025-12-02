@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:group_project/screens/purchase_offer_list_screen.dart';
 
-import 'l10n/app_localizations.dart';
+
 
 
 // sqflite base + web backend
@@ -43,7 +43,6 @@ class MyApp extends StatelessWidget {
 
       // 🔹 Localization using your manual AppLocalizations
       localizationsDelegates: const [
-        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
