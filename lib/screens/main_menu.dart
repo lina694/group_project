@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:group_project/screens/boat_list_page.dart';
 import 'package:group_project/screens/purchase_offer_list_screen.dart';
 import 'car_list_screen.dart';
 
@@ -49,13 +50,16 @@ class MainMenu extends StatelessWidget {
               // Member 2 Module Button
               _buildMenuButton(
                 context,
-                'Member 2 Module',
+                'Boat for Sales',
                 Icons.person,
                     () {
                   // TODO: Navigate to Member 2's screen
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Member 2 Module - Coming Soon')),
-                  );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BoatListPage(),
+                        ),
+                      );
                 },
               ),
 

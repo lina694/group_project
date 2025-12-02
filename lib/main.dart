@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:group_project/l10n/app_localizations.dart';
+import 'package:group_project/screens/main_menu.dart';
 
 import 'screens/boat_list_page.dart';
 
@@ -28,7 +29,7 @@ class BoatApp extends StatelessWidget {
 
       supportedLocales: AppLocalizations.supportedLocales,
 
-      home: const BoatListPage(),
+      home: const MainMenu(),
     );
   }
 }
