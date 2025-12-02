@@ -36,12 +36,23 @@ class _PurchaseOfferPhoneListScreenState
 
   Future<void> _loadOffers() async {
     setState(() => _isLoading = true);
-    final offers = await _dbHelper.getAllOffers();
-    setState(() {
-      _offers = offers;
-      _isLoading = false;
-    });
+
+    try {
+      final offers = await _dbHelper.getAllOffers();
+      setState(() {
+        _offers = offers;
+        _isLoading = false;
+      });
+    } catch (e, stack) {
+      debugPrint('Error loading offers: $e');
+      debugPrint('$stack');
+      setState(() {
+        _offers = [];
+        _isLoading = false;
+      });
+    }
   }
+
 
   Future<void> _navigateToDetails({PurchaseOffer? offer}) async {
     await Navigator.push(

@@ -29,19 +29,19 @@ class MainMenu extends StatelessWidget {
               const SizedBox(height: 40),
 
               // Cars For Sale Button
-              _buildMenuButton(
-                context,
-                'Cars For Sale',
-                Icons.directions_car,
-                    () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CarListScreen(),
-                    ),
-                  );
-                },
-              ),
+              // _buildMenuButton(
+              //   context,
+              //   'Cars For Sale',
+              //   Icons.directions_car,
+              //       () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => const CarListScreen(),
+              //       ),
+              //     );
+              //   },
+              // ),
 
               const SizedBox(height: 16),
 
