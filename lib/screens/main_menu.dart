@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:group_project/screens/boat_list_page.dart';
+import 'package:group_project/screens/purchase_offer_list_screen.dart';
 import 'car_list_screen.dart';
 
 /// Main menu screen that displays navigation buttons for all team members' modules.
@@ -48,13 +50,16 @@ class MainMenu extends StatelessWidget {
               // Member 2 Module Button
               _buildMenuButton(
                 context,
-                'Member 2 Module',
+                'Boat for Sales',
                 Icons.person,
                     () {
                   // TODO: Navigate to Member 2's screen
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Member 2 Module - Coming Soon')),
-                  );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BoatListPage(),
+                        ),
+                      );
                 },
               ),
 
@@ -78,12 +83,14 @@ class MainMenu extends StatelessWidget {
               // Member 4 Module Button
               _buildMenuButton(
                 context,
-                'Member 4 Module',
-                Icons.person,
+                'List of Purchased offers',
+                Icons.list,
                     () {
-                  // TODO: Navigate to Member 4's screen
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Member 4 Module - Coming Soon')),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PurchaseOfferListScreen(),
+                    ),
                   );
                 },
               ),

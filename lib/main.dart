@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'dart:io' show Platform;
-import 'screens/main_menu.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:group_project/l10n/app_localizations.dart';
+import 'package:group_project/screens/main_menu.dart';
 
-/// Main entry point of the application.
-/// Initializes the Flutter app and sets up the theme.
-void main() {
-  // Initialize FFI for desktop platforms
-  if (Platform.isWindows || Platform.isLinux) {
-    // Initialize FFI
-    sqfliteFfiInit();
-    // Change the default factory
-    databaseFactory = databaseFactoryFfi;
-  }
-  runApp(const MyApp());
+import 'screens/boat_list_page.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const BoatApp());
 }
 
-/// Root widget of the application.
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+/// Main Application with localization + routes
+class BoatApp extends StatelessWidget {
+  const BoatApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Group Project',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
+
+      // Localization
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+
+      supportedLocales: AppLocalizations.supportedLocales,
+
       home: const MainMenu(),
     );
   }

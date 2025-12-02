@@ -27,3 +27,25 @@
   "submit": "Submit",
   "detailsPlaceholder": "Select a customer or press + to add."
 }
+  "@@locale": "en",
+
+  "appTitle": "Boats for Sale",
+  "instructions": "Tap + to add a boat",
+
+  "addBoat": "Add Boat",
+  "editBoat": "Edit Boat",
+  "yearBuilt": "Year built",
+  "length": "Length",
+
+  "powerType": "Power Type",
+  "price": "Price",
+  "address": "Address",
+  "submit": "Submit",
+  "update": "Update",
+  "delete": "Delete",
+
+  "copyPrevious": "Copy previous?",
+  "copyPreviousContent": "Do you want to load the previous boat info?",
+  "yes": "Yes",
+  "no": "No"
+}

@@ -45,50 +45,51 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get cancel => 'لغو';
+  String get appTitle => 'Boats for Sale';
 
   @override
-  String get delete => 'حذف';
+  String get instructions => 'Tap + to add a boat';
 
   @override
-  String get allFieldsRequired => 'همه فیلدها باید پر شوند.';
+  String get addBoat => 'Add Boat';
 
   @override
-  String get customerCreated => 'مشتری ایجاد شد';
+  String get editBoat => 'Edit Boat';
 
   @override
-  String get customerUpdated => 'مشتری به‌روزرسانی شد';
+  String get yearBuilt => 'Year built';
 
   @override
-  String get customerDeleted => 'مشتری حذف شد';
+  String get length => 'Length';
 
   @override
-  String get editCustomer => 'ویرایش مشتری';
+  String get powerType => 'Power Type';
 
   @override
-  String get addCustomer => 'افزودن مشتری';
-
-  @override
-  String get firstName => 'نام';
-
-  @override
-  String get lastName => 'نام خانوادگی';
+  String get price => 'Price';
 
   @override
   String get address => 'آدرس';
 
   @override
-  String get dob => 'تاریخ تولد';
-
-  @override
-  String get license => 'شماره گواهینامه رانندگی';
+  String get submit => 'ثبت';
 
   @override
   String get update => 'به‌روزرسانی';
 
   @override
-  String get submit => 'ثبت';
+  String get delete => 'حذف';
 
   @override
-  String get detailsPlaceholder =>
-      'یک مشتری را انتخاب کنید یا برای افزودن، + را بزنید.';
+  String get copyPrevious => 'کپی قبلی';
+
+  @override
+  String get copyPreviousContent =>
+      'Do you want to load the previous boat info?';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
 }

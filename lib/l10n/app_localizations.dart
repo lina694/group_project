@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
 import 'app_localizations_fa.dart';
+import 'app_localizations_ko.dart';
 
 // ignore_for_file: type=lint
 
@@ -169,6 +170,74 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+    Locale('ko'),
+  ];
+
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Boats for Sale'**
+  String get appTitle;
+
+  /// No description provided for @instructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to add a boat'**
+  String get instructions;
+
+  /// No description provided for @addBoat.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Boat'**
+  String get addBoat;
+
+  /// No description provided for @editBoat.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Boat'**
+  String get editBoat;
+
+  /// No description provided for @yearBuilt.
+  ///
+  /// In en, this message translates to:
+  /// **'Year built'**
+  String get yearBuilt;
+
+  /// No description provided for @length.
+  ///
+  /// In en, this message translates to:
+  /// **'Length'**
+  String get length;
+
+  /// No description provided for @powerType.
+  ///
+  /// In en, this message translates to:
+  /// **'Power Type'**
+  String get powerType;
+
+  /// No description provided for @price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get price;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
 
   /// No description provided for @delete.
   ///
@@ -259,6 +328,29 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select a customer or press + to add.'**
   String get detailsPlaceholder;
+  /// No description provided for @copyPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy previous?'**
+  String get copyPrevious;
+
+  /// No description provided for @copyPreviousContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to load the previous boat info?'**
+  String get copyPreviousContent;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
 }
 
 class _AppLocalizationsDelegate
@@ -273,6 +365,7 @@ class _AppLocalizationsDelegate
   @override
   bool isSupported(Locale locale) =>
       <String>['en', 'fa'].contains(locale.languageCode);
+      <String>['en', 'fa', 'ko'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -285,6 +378,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'fa':
       return AppLocalizationsFa();
+    case 'ko':
+      return AppLocalizationsKo();
   }
 
   throw FlutterError(
