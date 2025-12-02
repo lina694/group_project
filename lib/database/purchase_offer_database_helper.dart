@@ -51,7 +51,7 @@ class PurchaseOfferDatabaseHelper {
   /// Creates the `purchase_offers` table if it does not exist yet.
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS purchase_offers (
+      CREATE TABLE IF NOT EXISTS purchase_offer (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         customer_id INTEGER NOT NULL,
         item_id INTEGER NOT NULL,
