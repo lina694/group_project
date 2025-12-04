@@ -1,73 +1,35 @@
-
 import 'package:flutter/material.dart';
-
-import '../database/purchase_offer_database_helper.dart';
+import '../database/purchase_database.dart';
 import '../models/purchase_offer.dart';
-import 'purchase_offer_details_screen.dart';
 
+/// Displays a list of all purchase offers.
 class PurchaseOfferListScreen extends StatefulWidget {
-  const PurchaseOfferListScreen({super.key});
+  final ValueChanged<PurchaseOffer> onOfferSelected;
+  final int? selectedOfferId;
+
+  const PurchaseOfferListScreen({
+    super.key,
+    required this.onOfferSelected,
+    this.selectedOfferId,
+  });
 
   @override
-  State<PurchaseOfferListScreen> createState() =>
-      _PurchaseOfferPhoneListScreenState();
+  State<PurchaseOfferListScreen> createState() => PurchaseOfferListScreenState();
 }
 
-class _PurchaseOfferPhoneListScreenState
-    extends State<PurchaseOfferListScreen> {
-  final _dbHelper = PurchaseOfferDatabaseHelper();
-  List<PurchaseOffer> _offers = [];
-  bool _isLoading = true;
+class PurchaseOfferListScreenState extends State<PurchaseOfferListScreen> {
+  late Future<List<PurchaseOffer>> _offers;
 
   @override
   void initState() {
     super.initState();
-    _loadOffers();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Welcome to Purchase Offers'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    });
+    refreshOffers();
   }
 
-  Future<void> _loadOffers() async {
-    setState(() => _isLoading = true);
-    final offers = await _dbHelper.getAllOffers();
+  void refreshOffers() {
     setState(() {
-      _offers = offers;
-      _isLoading = false;
+      _offers = PurchaseDatabase.instance.readAllOffers();
     });
-  }
-
-  Future<void> _navigateToDetails({PurchaseOffer? offer}) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PurchaseOfferDetailsScreen(offer: offer),
-      ),
-    );
-    _loadOffers();
-  }
-
-  void _showHelpDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => const AlertDialog(
-        title: Text('How to Use Purchase Offers'),
-        content: SingleChildScrollView(
-          child: Text(
-            '1. Tap "Add Offer" to create a new purchase offer.\n'
-                '2. Fill in all required fields.\n'
-                '3. Tap an offer to view or edit it.\n'
-                '4. Use Update or Delete in the details screen.',
-          ),
-        ),
-      ),
-    );
   }
 
   @override
@@ -76,63 +38,37 @@ class _PurchaseOfferPhoneListScreenState
       appBar: AppBar(
         title: const Text('Purchase Offers'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.help_outline),
-            onPressed: _showHelpDialog,
-          ),
+          IconButton(icon: const Icon(Icons.help), onPressed: (){
+            showDialog(context: context, builder: (c) => const AlertDialog(title: Text("Help"), content: Text("View and edit purchase offers.")));
+          })
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () => _navigateToDetails(),
-                icon: const Icon(Icons.add),
-                label: const Text('Add Offer'),
-              ),
-            ),
-          ),
-          Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _offers.isEmpty
-                ? const Center(
-              child: Text(
-                'No purchase offers yet.\nTap "Add Offer" to start.',
-                textAlign: TextAlign.center,
-              ),
-            )
-                : ListView.builder(
-              itemCount: _offers.length,
+      body: FutureBuilder<List<PurchaseOffer>>(
+        future: _offers,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No offers found.'));
+          } else {
+            final offers = snapshot.data!;
+            return ListView.builder(
+              itemCount: offers.length,
               itemBuilder: (context, index) {
-                final offer = _offers[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: ListTile(
-                    leading: const Icon(Icons.receipt_long, size: 32),
-                    title: Text(
-                      'Customer #${offer.customerId} • ${offer.itemType.toUpperCase()} #${offer.itemId}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(
-                      '\$${offer.price.toStringAsFixed(2)} • ${offer.status}',
-                    ),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => _navigateToDetails(offer: offer),
-                  ),
+                final offer = offers[index];
+                final isSelected = offer.id == widget.selectedOfferId;
+
+                return ListTile(
+                  leading: const Icon(Icons.local_offer),
+                  title: Text(offer.buyerName),
+                  subtitle: Text('\$${offer.amount}'),
+                  selected: isSelected,
+                  onTap: () => widget.onOfferSelected(offer),
                 );
               },
-            ),
-          ),
-        ],
+            );
+          }
+        },
       ),
     );
   }

@@ -1,14 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:group_project/screens/boat_list_page.dart';
-import 'package:group_project/screens/purchase_offer_list_screen.dart';
+// Import the entry points for all 4 modules
+import '../l10n/app_localizations.dart';
 import 'car_list_screen.dart';
+import 'boat_responsive_layout.dart';
+import 'customer_responsive_layout.dart';
+import 'purchase_offer_responsive_layout.dart';
+import 'package:flutter/material.dart';
 
-/// Main menu screen that displays navigation buttons for all team members' modules.
 class MainMenu extends StatelessWidget {
   const MainMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Access localization
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Group Project Main Menu'),
@@ -30,7 +35,7 @@ class MainMenu extends StatelessWidget {
               ),
               const SizedBox(height: 40),
 
-              // Cars For Sale Button
+              // 1. Cars For Sale
               _buildMenuButton(
                 context,
                 'Cars For Sale',
@@ -47,49 +52,52 @@ class MainMenu extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // Member 2 Module Button
+              // 2. Boats for Sale
               _buildMenuButton(
                 context,
-                'Boat for Sales',
-                Icons.person,
+                'Boats For Sale',
+                Icons.sailing,
                     () {
-                  // TODO: Navigate to Member 2's screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const BoatListPage(),
-                        ),
-                      );
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              // Member 3 Module Button
-              _buildMenuButton(
-                context,
-                'Member 3 Module',
-                Icons.person,
-                    () {
-                  // TODO: Navigate to Member 3's screen
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Member 3 Module - Coming Soon')),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      // Links to the new Master-Detail layout
+                      builder: (context) => const BoatResponsiveLayout(),
+                    ),
                   );
                 },
               ),
 
               const SizedBox(height: 16),
 
-              // Member 4 Module Button
+              // 3. Customer List
               _buildMenuButton(
                 context,
-                'List of Purchased offers',
-                Icons.list,
+                l10n.customersTitle,
+                Icons.person_outline,
                     () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PurchaseOfferListScreen(),
+                      builder: (context) => const CustomerResponsiveLayout(),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 16),
+
+              // 4. Purchase Offers
+              _buildMenuButton(
+                context,
+                'Purchase Offers',
+                Icons.local_offer,
+                    () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      // Links to the new Master-Detail layout
+                      builder: (context) => const PurchaseOfferResponsiveLayout(),
                     ),
                   );
                 },
@@ -101,12 +109,7 @@ class MainMenu extends StatelessWidget {
     );
   }
 
-  /// Builds a menu button with consistent styling.
-  ///
-  /// [context] - BuildContext for navigation
-  /// [label] - Button text label
-  /// [icon] - Icon to display on button
-  /// [onPressed] - Callback function when button is pressed
+  /// Helper widget to build consistent menu buttons
   Widget _buildMenuButton(
       BuildContext context,
       String label,

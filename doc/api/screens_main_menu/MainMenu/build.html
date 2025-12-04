@@ -109,6 +109,9 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  &#47;&#47; Access localization
+  final l10n = AppLocalizations.of(context)!;
+
   return Scaffold(
     appBar: AppBar(
       title: const Text(&#39;Group Project Main Menu&#39;),
@@ -130,7 +133,7 @@ Widget build(BuildContext context) {
             ),
             const SizedBox(height: 40),
 
-            &#47;&#47; Cars For Sale Button
+            &#47;&#47; 1. Cars For Sale
             _buildMenuButton(
               context,
               &#39;Cars For Sale&#39;,
@@ -147,45 +150,53 @@ Widget build(BuildContext context) {
 
             const SizedBox(height: 16),
 
-            &#47;&#47; Member 2 Module Button
+            &#47;&#47; 2. Boats for Sale
             _buildMenuButton(
               context,
-              &#39;Member 2 Module&#39;,
-              Icons.person,
+              &#39;Boats For Sale&#39;,
+              Icons.sailing,
                   () {
-                &#47;&#47; TODO: Navigate to Member 2&#39;s screen
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text(&#39;Member 2 Module - Coming Soon&#39;)),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    &#47;&#47; Links to the new Master-Detail layout
+                    builder: (context) =&gt; const BoatResponsiveLayout(),
+                  ),
                 );
               },
             ),
 
             const SizedBox(height: 16),
 
-            &#47;&#47; Member 3 Module Button
+            &#47;&#47; 3. Customer List
             _buildMenuButton(
               context,
-              &#39;Member 3 Module&#39;,
-              Icons.person,
+              l10n.customersTitle,
+              Icons.person_outline,
                   () {
-                &#47;&#47; TODO: Navigate to Member 3&#39;s screen
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text(&#39;Member 3 Module - Coming Soon&#39;)),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =&gt; const CustomerResponsiveLayout(),
+                  ),
                 );
               },
             ),
 
             const SizedBox(height: 16),
 
-            &#47;&#47; Member 4 Module Button
+            &#47;&#47; 4. Purchase Offers
             _buildMenuButton(
               context,
-              &#39;Member 4 Module&#39;,
-              Icons.person,
+              &#39;Purchase Offers&#39;,
+              Icons.local_offer,
                   () {
-                &#47;&#47; TODO: Navigate to Member 4&#39;s screen
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text(&#39;Member 4 Module - Coming Soon&#39;)),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    &#47;&#47; Links to the new Master-Detail layout
+                    builder: (context) =&gt; const PurchaseOfferResponsiveLayout(),
+                  ),
                 );
               },
             ),

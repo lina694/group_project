@@ -63,9 +63,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Inserts a new car into the database.</p>
-<p><code>car</code> - The car object to insert
-Returns the ID of the newly inserted car.</p>
+  <p>Inserts a new <a href="../../models_car/Car-class.html">Car</a> into the database.</p>
 </section>
 
 
@@ -74,10 +72,11 @@ Returns the ID of the newly inserted car.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertCar(Car car) async {
   final db = await database;
-  print(&#39;DEBUG: Inserting car: ${car.toString()}&#39;);
-  final id = await db.insert(&#39;cars&#39;, car.toMap());
-  print(&#39;DEBUG: Car inserted with ID: $id&#39;);
-  return id;
+  return await db.insert(
+    &#39;cars&#39;,
+    car.toMap(),
+    conflictAlgorithm: ConflictAlgorithm.replace,
+  );
 }</code></pre>
 </section>
 

@@ -4,14 +4,18 @@ import '../database/database_helper.dart';
 import 'car_details_screen.dart';
 import 'car_list_with_details_screen.dart';
 
-/// Screen displaying the list of all cars for sale.
-/// Automatically switches between phone and desktop/tablet layouts.
+/// The main screen for displaying the list of cars.
+///
+/// This widget handles responsive design by checking the screen width.
+/// It renders [_PhoneCarListScreen] for smaller devices and
+/// [CarListWithDetailsScreen] for tablets and desktops.
 class CarListScreen extends StatelessWidget {
+  /// Creates a [CarListScreen].
   const CarListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Check screen width (Requirement 4: Responsive layout)
+    // Check screen width for responsive layout
     final screenWidth = MediaQuery.of(context).size.width;
     final isLargeScreen = screenWidth > 600;
 
@@ -25,7 +29,7 @@ class CarListScreen extends StatelessWidget {
   }
 }
 
-/// Phone version of car list screen (full screen navigation).
+/// The phone version of the car list screen using full-screen navigation.
 class _PhoneCarListScreen extends StatefulWidget {
   const _PhoneCarListScreen();
 
@@ -53,6 +57,7 @@ class _PhoneCarListScreenState extends State<_PhoneCarListScreen> {
     });
   }
 
+  /// Fetches the list of cars from the database.
   Future<void> _loadCars() async {
     setState(() => _isLoading = true);
     final cars = await _dbHelper.getAllCars();
@@ -62,6 +67,7 @@ class _PhoneCarListScreenState extends State<_PhoneCarListScreen> {
     });
   }
 
+  /// Displays instructions on how to use the app.
   void _showHelpDialog() {
     showDialog(
       context: context,
@@ -70,15 +76,10 @@ class _PhoneCarListScreenState extends State<_PhoneCarListScreen> {
         content: const SingleChildScrollView(
           child: Text(
             '1. Click "Add Car" to list a new car for sale\n\n'
-                '2. Fill in all required fields:\n'
-                '   • Year of Manufacture\n'
-                '   • Make (e.g., Toyota, Tesla)\n'
-                '   • Model (e.g., Corolla, Model 3)\n'
-                '   • Price\n'
-                '   • Kilometers Driven\n\n'
-                '3. Click Submit to save the listing\n\n'
-                '4. Tap on a car from the list to view/edit details\n\n'
-                '5. Use Update to save changes or Delete to remove the listing',
+                '2. Fill in all required fields.\n\n'
+                '3. Click Submit to save the listing.\n\n'
+                '4. Tap on a car from the list to view/edit details.\n\n'
+                '5. Use Update to save changes or Delete to remove the listing.',
           ),
         ),
         actions: [
@@ -91,6 +92,7 @@ class _PhoneCarListScreenState extends State<_PhoneCarListScreen> {
     );
   }
 
+  /// Navigates to the details screen.
   Future<void> _navigateToDetails({Car? car}) async {
     await Navigator.push(
       context,
@@ -98,7 +100,7 @@ class _PhoneCarListScreenState extends State<_PhoneCarListScreen> {
         builder: (context) => CarDetailsScreen(car: car),
       ),
     );
-    _loadCars();
+    _loadCars(); // Refresh list when returning
   }
 
   @override
@@ -156,7 +158,7 @@ class _PhoneCarListScreenState extends State<_PhoneCarListScreen> {
                   child: ListTile(
                     leading: const Icon(Icons.directions_car, size: 40),
                     title: Text(
-                      car.toString(),
+                      car.toString(), // Ensure Car model has toString() or use properties
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(

@@ -1,49 +1,48 @@
+/// Represents an offer to purchase an item.
 class PurchaseOffer {
-  final int? id;
-  final int customerId;
-  final int itemId;       // car/boat ID
-  final String itemType;  // 'car' or 'boat'
-  final double price;
-  final String offerDate; // 'YYYY-MM-DD'
-  final String status;    // 'accepted' / 'rejected' / 'pending'
+  /// Unique ID for the offer.
+  int? id;
 
+  /// The name of the buyer.
+  String buyerName;
+
+  /// The amount offered.
+  double amount;
+
+  /// The date of the offer.
+  String date;
+
+  /// The status (Pending, Accepted, Rejected).
+  String status;
+
+  /// Creates a [PurchaseOffer] instance.
   PurchaseOffer({
     this.id,
-    required this.customerId,
-    required this.itemId,
-    required this.itemType,
-    required this.price,
-    required this.offerDate,
+    required this.buyerName,
+    required this.amount,
+    required this.date,
     required this.status,
   });
 
+  /// Converts an [PurchaseOffer] into a Map for the database.
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'customer_id': customerId,
-      'item_id': itemId,
-      'item_type': itemType,
-      'price': price,
-      'offer_date': offerDate,
+      'buyerName': buyerName,
+      'amount': amount,
+      'date': date,
       'status': status,
     };
   }
 
+  /// Creates a [PurchaseOffer] from a Map.
   factory PurchaseOffer.fromMap(Map<String, dynamic> map) {
     return PurchaseOffer(
-      id: map['id'] as int?,
-      customerId: map['customer_id'] as int,
-      itemId: map['item_id'] as int,
-      itemType: map['item_type'] as String,
-      price: (map['price'] as num).toDouble(),
-      offerDate: map['offer_date'] as String,
-      status: map['status'] as String,
+      id: map['id'],
+      buyerName: map['buyerName'],
+      amount: map['amount'],
+      date: map['date'],
+      status: map['status'],
     );
-  }
-
-  @override
-  String toString() {
-    return 'Customer #$customerId – Item #$itemId '
-        '(\$${price.toStringAsFixed(2)}, $status)';
   }
 }

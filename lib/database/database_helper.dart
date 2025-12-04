@@ -1,90 +1,93 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../models/boat.dart';
+import '../models/car.dart';
 
-/// A helper class responsible for managing all database operations.
-///
-/// This class handles:
-/// - Database initialization
-/// - Creating the `boats` table
-/// - Inserting boats
-/// - Querying boats
-/// - Updating boats
-/// - Deleting boats
-///
-/// All operations use SQLite via the `sqflite` package.
-class DBHelper {
-  /// Singleton database instance.
-  static Database? _db;
+/// Helper class to manage the SQLite database for the Cars feature.
+class DatabaseHelper {
+  // Singleton pattern to ensure only one instance of the database exists.
+  static final DatabaseHelper _instance = DatabaseHelper._internal();
+  static Database? _database;
 
-  /// Returns the database instance, creating it if necessary.
-  static Future<Database> get database async {
-    if (_db != null) return _db!;
-    _db = await initDB();
-    return _db!;
+  factory DatabaseHelper() {
+    return _instance;
   }
 
-  /// Initializes the SQLite database and creates the boats table.
-  static Future<Database> initDB() async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, "boats.db");
+  DatabaseHelper._internal();
+
+  /// Returns the database instance, creating it if it doesn't exist.
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDatabase();
+    return _database!;
+  }
+
+  /// Initializes the database and creates the table.
+  Future<Database> _initDatabase() async {
+    // Get the default database path
+    String path = join(await getDatabasesPath(), 'cars_database.db');
 
     return await openDatabase(
       path,
       version: 1,
-      onCreate: (db, version) async {
-        await db.execute("""
-          CREATE TABLE boats (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            year TEXT,
-            length TEXT,
-            powerType TEXT,
-            price TEXT,
-            address TEXT
-          )
-        """);
-      },
+      onCreate: _onCreate,
     );
   }
 
-  /// Inserts a new [boat] into the boats table.
-  ///
-  /// Returns the generated ID of the inserted row.
-  static Future<int> insertBoat(Boat boat) async {
-    final db = await database;
-    return db.insert("boats", boat.toMap());
+  /// Creates the 'cars' table.
+  Future<void> _onCreate(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE cars(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        year INTEGER,
+        make TEXT,
+        model TEXT,
+        price REAL,
+        kilometers INTEGER
+      )
+    ''');
   }
 
-  /// Retrieves all boats stored in the database.
-  ///
-  /// Returns a list of [Boat] objects.
-  static Future<List<Boat>> getBoats() async {
-    final db = await database;
-    final result = await db.query("boats");
-    return result.map((e) => Boat.fromMap(e)).toList();
-  }
+  // ---------------------------------------------------------------------------
+  // CRUD Operations (Create, Read, Update, Delete)
+  // ---------------------------------------------------------------------------
 
-  /// Updates an existing [boat] record in the database.
-  ///
-  /// Returns the number of affected rows.
-  static Future<int> updateBoat(Boat boat) async {
+  /// Inserts a new [Car] into the database.
+  Future<int> insertCar(Car car) async {
     final db = await database;
-    return db.update(
-      "boats",
-      boat.toMap(),
-      where: "id = ?",
-      whereArgs: [boat.id],
+    return await db.insert(
+      'cars',
+      car.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  /// Deletes a boat record from the database by its [id].
-  ///
-  /// Returns the number of affected rows.
-  static Future<int> deleteBoat(int id) async {
+  /// Retrieves all cars from the database.
+  Future<List<Car>> getAllCars() async {
     final db = await database;
-    return db.delete(
-      "boats",
-      where: "id = ?",
+    final List<Map<String, dynamic>> maps = await db.query('cars');
+
+    return List.generate(maps.length, (i) {
+      return Car.fromMap(maps[i]);
+    });
+  }
+
+  /// Updates an existing [Car] in the database.
+  Future<int> updateCar(Car car) async {
+    final db = await database;
+    return await db.update(
+      'cars',
+      car.toMap(),
+      where: 'id = ?',
+      whereArgs: [car.id],
+    );
+  }
+
+  /// Deletes a car from the database by its [id].
+  Future<int> deleteCar(int id) async {
+    final db = await database;
+    return await db.delete(
+      'cars',
+      where: 'id = ?',
       whereArgs: [id],
     );
   }

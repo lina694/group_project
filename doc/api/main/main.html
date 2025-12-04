@@ -61,23 +61,20 @@
 
     </section>
     
-<section class="desc markdown">
-  <p>Main entry point of the application.
-Initializes the Flutter app and sets up the theme.</p>
-</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void main() {
-  &#47;&#47; Initialize FFI for desktop platforms
+  WidgetsFlutterBinding.ensureInitialized();
+
+  &#47;&#47; THIS BLOCK IS CRITICAL FOR WINDOWS&#47;LINUX
   if (Platform.isWindows || Platform.isLinux) {
-    &#47;&#47; Initialize FFI
     sqfliteFfiInit();
-    &#47;&#47; Change the default factory
     databaseFactory = databaseFactoryFfi;
   }
+
   runApp(const MyApp());
 }</code></pre>
 </section>

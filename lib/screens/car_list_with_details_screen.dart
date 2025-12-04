@@ -3,9 +3,11 @@ import '../models/car.dart';
 import '../database/database_helper.dart';
 import 'car_details_screen.dart';
 
-/// Combined screen for tablet/desktop layout (Requirement 4).
-/// Shows car list on left and details on right side-by-side.
+/// A combined screen for tablet/desktop layouts that implements the Master-Detail pattern.
+///
+/// Displays the [Car] list on the left and the [CarDetailsScreen] on the right.
 class CarListWithDetailsScreen extends StatefulWidget {
+  /// Creates a [CarListWithDetailsScreen].
   const CarListWithDetailsScreen({super.key});
 
   @override
@@ -16,7 +18,11 @@ class _CarListWithDetailsScreenState extends State<CarListWithDetailsScreen> {
   final DatabaseHelper _dbHelper = DatabaseHelper();
   List<Car> _cars = [];
   bool _isLoading = true;
+
+  /// The currently selected car to display in the details pane.
   Car? _selectedCar;
+
+  /// Flag to determine if the "Add Car" form is currently active.
   bool _isAddingNew = false;
 
   @override
@@ -42,7 +48,7 @@ class _CarListWithDetailsScreenState extends State<CarListWithDetailsScreen> {
     setState(() {
       _cars = cars;
       _isLoading = false;
-      // Clear selection if car was deleted
+      // Clear selection if the selected car was deleted externally
       if (_selectedCar != null && !_cars.any((c) => c.id == _selectedCar!.id)) {
         _selectedCar = null;
         _isAddingNew = false;
@@ -59,15 +65,10 @@ class _CarListWithDetailsScreenState extends State<CarListWithDetailsScreen> {
         content: const SingleChildScrollView(
           child: Text(
             '1. Click "Add Car" to list a new car for sale\n\n'
-                '2. Fill in all required fields:\n'
-                '   • Year of Manufacture\n'
-                '   • Make (e.g., Toyota, Tesla)\n'
-                '   • Model (e.g., Corolla, Model 3)\n'
-                '   • Price\n'
-                '   • Kilometers Driven\n\n'
-                '3. Click Submit to save the listing\n\n'
-                '4. Click on a car from the list to view/edit details\n\n'
-                '5. Use Update to save changes or Delete to remove the listing',
+                '2. Fill in all required fields.\n\n'
+                '3. Click Submit to save.\n\n'
+                '4. Click on a car from the list to view/edit details on the right.\n\n'
+                '5. Use Update to save changes or Delete to remove the listing.',
           ),
         ),
         actions: [
@@ -80,7 +81,7 @@ class _CarListWithDetailsScreenState extends State<CarListWithDetailsScreen> {
     );
   }
 
-  /// Callback when car is saved or deleted.
+  /// Callback used by the detail screen to notify the list to refresh.
   void _onCarChanged() {
     _loadCars();
     setState(() {
@@ -105,7 +106,7 @@ class _CarListWithDetailsScreenState extends State<CarListWithDetailsScreen> {
       ),
       body: Row(
         children: [
-          // Left side: Car List
+          // Left side: Car List (Fixed Width)
           SizedBox(
             width: 400,
             child: Column(
@@ -186,15 +187,16 @@ class _CarListWithDetailsScreenState extends State<CarListWithDetailsScreen> {
             ),
           ),
 
-          // Divider
+          // Divider between List and Details
           const VerticalDivider(width: 1),
 
-          // Right side: Details
+          // Right side: Details Pane
           Expanded(
             child: _isAddingNew || _selectedCar != null
                 ? _DesktopCarDetails(
               car: _selectedCar,
               onCarChanged: _onCarChanged,
+              // Key ensures widget rebuilds when selection changes
               key: ValueKey(_selectedCar?.id ?? 'new'),
             )
                 : Center(
@@ -232,7 +234,7 @@ class _CarListWithDetailsScreenState extends State<CarListWithDetailsScreen> {
   }
 }
 
-/// Desktop version of car details embedded in the side panel.
+/// A wrapper widget for the desktop version of car details embedded in the side panel.
 class _DesktopCarDetails extends StatelessWidget {
   final Car? car;
   final VoidCallback onCarChanged;

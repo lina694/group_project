@@ -63,7 +63,6 @@
     
 <section class="desc markdown">
   <p>Retrieves all cars from the database.</p>
-<p>Returns a list of all Car objects.</p>
 </section>
 
 
@@ -73,7 +72,6 @@
   <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;Car&gt;&gt; getAllCars() async {
   final db = await database;
   final List&lt;Map&lt;String, dynamic&gt;&gt; maps = await db.query(&#39;cars&#39;);
-  print(&#39;DEBUG: Found ${maps.length} cars in database&#39;);
 
   return List.generate(maps.length, (i) {
     return Car.fromMap(maps[i]);

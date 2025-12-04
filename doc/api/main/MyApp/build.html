@@ -116,6 +116,11 @@ Widget build(BuildContext context) {
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       useMaterial3: true,
     ),
+
+    &#47;&#47; Localization Setup
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+
     home: const MainMenu(),
   );
 }</code></pre>

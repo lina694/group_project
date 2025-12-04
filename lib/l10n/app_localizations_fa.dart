@@ -45,6 +45,57 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get cancel => 'لغو';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get allFieldsRequired => 'همه فیلدها باید پر شوند.';
+
+  @override
+  String get customerCreated => 'مشتری ایجاد شد';
+
+  @override
+  String get customerUpdated => 'مشتری به‌روزرسانی شد';
+
+  @override
+  String get customerDeleted => 'مشتری حذف شد';
+
+  @override
+  String get editCustomer => 'ویرایش مشتری';
+
+  @override
+  String get addCustomer => 'افزودن مشتری';
+
+  @override
+  String get firstName => 'نام';
+
+  @override
+  String get lastName => 'نام خانوادگی';
+
+  @override
+  String get address => 'آدرس';
+
+  @override
+  String get dob => 'تاریخ تولد';
+
+  @override
+  String get license => 'شماره گواهینامه رانندگی';
+
+  @override
+  String get update => 'به‌روزرسانی';
+
+  @override
+  String get submit => 'ثبت';
+
+  @override
+  String get detailsPlaceholder =>
+      'یک مشتری را انتخاب کنید یا برای افزودن، + را بزنید.';
+
+  @override
   String get appTitle => 'Boats for Sale';
 
   @override
@@ -67,21 +118,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get price => 'Price';
-
-  @override
-  String get address => 'آدرس';
-
-  @override
-  String get submit => 'ثبت';
-
-  @override
-  String get update => 'به‌روزرسانی';
-
-  @override
-  String get delete => 'حذف';
-
-  @override
-  String get copyPrevious => 'کپی قبلی';
 
   @override
   String get copyPreviousContent =>

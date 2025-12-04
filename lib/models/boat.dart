@@ -1,54 +1,48 @@
-/// The Boat model represents a single boat listed for sale.
-/// It contains basic attributes such as year, length, power type,
-/// price, and address.
-///
-/// This model is stored in the local SQLite database.
+/// Represents a boat for sale.
 class Boat {
-  /// Unique identifier for the boat record in the database.
+  /// Unique ID for the boat.
   int? id;
 
-  /// The year the boat was built.
-  String year;
+  /// The name or make of the boat.
+  String name;
 
-  /// The physical length of the boat.
-  String length;
+  /// The length of the boat in feet.
+  double length;
 
-  /// The type of power the boat uses (`sail` or `motor`).
+  /// The price of the boat.
+  double price;
+
+  /// The type of power (Sail, Motor, etc.).
   String powerType;
 
-  /// The selling price of the boat.
-  String price;
-
-  /// The address where the boat is located.
-  String address;
-
-  /// Creates a new [Boat] instance.
+  /// Creates a [Boat] instance.
   Boat({
     this.id,
-    required this.year,
+    required this.name,
     required this.length,
-    required this.powerType,
     required this.price,
-    required this.address,
+    required this.powerType,
   });
 
-  /// Converts a Boat object into a Map for database storage.
-  Map<String, dynamic> toMap() => {
-    'id': id,
-    'year': year,
-    'length': length,
-    'powerType': powerType,
-    'price': price,
-    'address': address,
-  };
+  /// Converts a [Boat] into a Map for the database.
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'length': length,
+      'price': price,
+      'powerType': powerType,
+    };
+  }
 
-  /// Factory constructor to create a [Boat] from a database record.
-  static Boat fromMap(Map<String, dynamic> map) => Boat(
-    id: map['id'],
-    year: map['year'],
-    length: map['length'],
-    powerType: map['powerType'],
-    price: map['price'],
-    address: map['address'],
-  );
+  /// Creates a [Boat] from a Map.
+  factory Boat.fromMap(Map<String, dynamic> map) {
+    return Boat(
+      id: map['id'],
+      name: map['name'],
+      length: map['length'],
+      price: map['price'],
+      powerType: map['powerType'],
+    );
+  }
 }

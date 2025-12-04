@@ -59,9 +59,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Creates a Car object from a database Map.</p>
-<p><code>map</code> - Map containing car data from database
-Returns a new Car instance.</p>
+  <p>Creates a <a href="../../models_car/Car-class.html">Car</a> object from a database Map.</p>
 </section>
 
 
@@ -70,12 +68,12 @@ Returns a new Car instance.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Car.fromMap(Map&lt;String, dynamic&gt; map) {
   return Car(
-    id: map[&#39;id&#39;] as int?,
-    year: map[&#39;year&#39;] as int,
-    make: map[&#39;make&#39;] as String,
-    model: map[&#39;model&#39;] as String,
-    price: map[&#39;price&#39;] as double,
-    kilometers: map[&#39;kilometers&#39;] as int,
+    id: map[&#39;id&#39;],
+    year: map[&#39;year&#39;],
+    make: map[&#39;make&#39;],
+    model: map[&#39;model&#39;],
+    price: map[&#39;price&#39;],
+    kilometers: map[&#39;kilometers&#39;],
   );
 }</code></pre>
 </section>

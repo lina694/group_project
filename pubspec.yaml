@@ -1,11 +1,7 @@
 name: group_project
-description: "CST2335 Group Project - Cars For Sale Management System."
+description: "CST2335 Group Project"
 publish_to: 'none'
 
-# Prevent accidental publishing to pub.dev
-publish_to: 'none'  # Remove this line if you wish to publish to pub.dev
-
-# Application version
 version: 1.0.0+1
 
 environment:
@@ -14,35 +10,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  # Internationalization support
   flutter_localizations:
     sdk: flutter
   intl: any
 
-  # Database
   sqflite: ^2.3.0
   sqflite_common_ffi: ^2.3.0+1
   path: ^1.9.0
-
-  # Storage (Required for the Customer feature code I gave you)
   encrypted_shared_preferences: ^3.0.1
-
-  # Icons
-  # Encrypted SharedPreferences
   flutter_secure_storage: ^9.0.0
-
-  # iOS-style icons
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # Recommended lints
   flutter_lints: ^6.0.0
   build_runner: ^2.4.13
-
 
 flutter:
   uses-material-design: true

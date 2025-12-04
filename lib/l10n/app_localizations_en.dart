@@ -46,40 +46,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
-  String get appTitle => 'Boats for Sale';
-
-  @override
-  String get instructions => 'Tap + to add a boat';
-
-  @override
-  String get addBoat => 'Add Boat';
-
-  @override
-  String get editBoat => 'Edit Boat';
-
-  @override
-  String get yearBuilt => 'Year built';
-
-  @override
-  String get length => 'Length';
-
-  @override
-  String get powerType => 'Power Type';
-
-  @override
-  String get price => 'Price';
-
-  @override
-  String get address => 'Address';
-
-  @override
-  String get submit => 'Submit';
-
-  @override
-  String get update => 'Update';
 
   @override
   String get delete => 'Delete';
+
+  @override
+  String get save => 'Save';
 
   @override
   String get allFieldsRequired => 'All fields must have a value.';
@@ -122,7 +94,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get detailsPlaceholder => 'Select a customer or press + to add.';
-  String get copyPrevious => 'Copy previous?';
+
+  @override
+  String get appTitle => 'Boats for Sale';
+
+  @override
+  String get instructions => 'Tap + to add a boat';
+
+  @override
+  String get addBoat => 'Add Boat';
+
+  @override
+  String get editBoat => 'Edit Boat';
+
+  @override
+  String get yearBuilt => 'Year built';
+
+  @override
+  String get length => 'Length';
+
+  @override
+  String get powerType => 'Power Type';
+
+  @override
+  String get price => 'Price';
 
   @override
   String get copyPreviousContent =>

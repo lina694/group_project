@@ -1,4 +1,6 @@
 {
+  "@@locale": "en",
+
   "customersTitle": "Customers",
   "helpTitle": "Help - Customer List",
   "helpContent": "This page shows a list of all customers.\n\n- Tap a customer to see their details or edit them.\n- Tap the \"+\" button to add a new customer.",
@@ -12,6 +14,7 @@
   "deleteDialogContent": "Are you sure you want to delete this customer?",
   "cancel": "Cancel",
   "delete": "Delete",
+  "save": "Save",
   "allFieldsRequired": "All fields must have a value.",
   "customerCreated": "Customer Created",
   "customerUpdated": "Customer Updated",
@@ -25,26 +28,16 @@
   "license": "Driver's License #",
   "update": "Update",
   "submit": "Submit",
-  "detailsPlaceholder": "Select a customer or press + to add."
-}
-  "@@locale": "en",
+  "detailsPlaceholder": "Select a customer or press + to add.",
 
   "appTitle": "Boats for Sale",
   "instructions": "Tap + to add a boat",
-
   "addBoat": "Add Boat",
   "editBoat": "Edit Boat",
   "yearBuilt": "Year built",
   "length": "Length",
-
   "powerType": "Power Type",
   "price": "Price",
-  "address": "Address",
-  "submit": "Submit",
-  "update": "Update",
-  "delete": "Delete",
-
-  "copyPrevious": "Copy previous?",
   "copyPreviousContent": "Do you want to load the previous boat info?",
   "yes": "Yes",
   "no": "No"

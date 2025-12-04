@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import '../utils/localization_helper.dart';
 import '../models/car.dart';
-import '../database/database_helper.dart';
-import '../utils/secure_storage.dart';
+import '../database/database_helper.dart'; // Ensure this matches your teammate's DB file
+import '../services/car_prefs.dart'; // Import the new prefs file
 
-/// Screen for adding new cars or editing existing car listings.
-/// Supports copying information from the previously added car.
+/// A screen widget that allows users to add a new car or edit an existing one.
+///
+/// It includes form validation, database operations (insert/update/delete),
+/// and a feature to copy data from the previously entered car.
 class CarDetailsScreen extends StatefulWidget {
+  /// The car object to edit. If null, the screen is in "Add Mode".
   final Car? car;
-  final bool isEmbedded; // NEW: Whether this is embedded in desktop layout
-  final VoidCallback? onSaved; // NEW: Callback when car is saved/deleted
 
+  /// A flag indicating if this screen is embedded within a larger layout (Desktop/Tablet).
+  /// If true, the AppBar is hidden.
+  final bool isEmbedded;
+
+  /// A callback function triggered after a successful save or delete operation.
+  final VoidCallback? onSaved;
+
+  /// Creates a [CarDetailsScreen].
   const CarDetailsScreen({
     super.key,
     this.car,
-    this.isEmbedded = false, // NEW
-    this.onSaved, // NEW
+    this.isEmbedded = false,
+    this.onSaved,
   });
 
   @override
@@ -23,21 +31,30 @@ class CarDetailsScreen extends StatefulWidget {
 }
 
 class _CarDetailsScreenState extends State<CarDetailsScreen> {
+  /// Global key for the form state to handle validation.
   final _formKey = GlobalKey<FormState>();
+
+  /// Instance of the database helper for CRUD operations.
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
+  /// Instance of the preferences service for the "Copy Previous" feature.
+  final CarPrefs _carPrefs = CarPrefs();
+
+  // Text Controllers for form fields
   late TextEditingController _yearController;
   late TextEditingController _makeController;
   late TextEditingController _modelController;
   late TextEditingController _priceController;
   late TextEditingController _kilometersController;
 
+  /// Helper getter to check if we are adding a new car.
   bool get _isNewCar => widget.car == null;
 
   @override
   void initState() {
     super.initState();
 
+    // Initialize controllers with existing data or empty strings
     _yearController = TextEditingController(
       text: widget.car?.year.toString() ?? '',
     );
@@ -50,7 +67,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
       text: widget.car?.kilometers.toString() ?? '',
     );
 
-    // If adding new car, ask to copy previous
+    // If adding a new car, prompt the user to copy previous data
     if (_isNewCar) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _askToCopyPrevious();
@@ -60,6 +77,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
 
   @override
   void dispose() {
+    // Dispose controllers to free resources
     _yearController.dispose();
     _makeController.dispose();
     _modelController.dispose();
@@ -68,9 +86,10 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
     super.dispose();
   }
 
-  /// Asks user if they want to copy information from the previous car.
+  /// Shows an AlertDialog asking if the user wants to populate fields
+  /// from the last saved car entry.
   Future<void> _askToCopyPrevious() async {
-    final lastCar = await SecureStorageHelper.getLastCar();
+    final lastCar = await _carPrefs.getLastCar();
 
     if (lastCar == null || !mounted) return;
 
@@ -98,7 +117,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
     );
   }
 
-  /// Copies information from the previous car to the form fields.
+  /// Populates the text controllers with data from [car].
   void _copyFromPrevious(Car car) {
     setState(() {
       _yearController.text = car.year.toString();
@@ -113,7 +132,9 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
     );
   }
 
-  /// Validates and saves the car (insert or update).
+  /// Validates the form and saves the car to the database.
+  ///
+  /// Handles both insert (for new cars) and update (for existing cars).
   Future<void> _saveCar() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -128,7 +149,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
 
     if (_isNewCar) {
       await _dbHelper.insertCar(car);
-      await SecureStorageHelper.saveLastCar(car);
+      await _carPrefs.saveLastCar(car); // Save to prefs
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -145,19 +166,17 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
       }
     }
 
-    // Handle navigation based on mode
+    // Handle navigation or callback based on layout mode
     if (mounted) {
       if (widget.isEmbedded) {
-        // Call callback for desktop layout
         widget.onSaved?.call();
       } else {
-        // Pop for phone layout
         Navigator.pop(context);
       }
     }
   }
 
-  /// Shows confirmation dialog and deletes the car.
+  /// Shows a confirmation dialog and deletes the car from the database.
   Future<void> _deleteCar() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -197,7 +216,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
     }
   }
 
-  /// Shows the help dialog with instructions.
+  /// Displays the help dialog with instructions.
   void _showHelpDialog() {
     showDialog(
       context: context,
@@ -207,11 +226,11 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
           child: Text(
             'Fill in all the required fields:\n\n'
                 '• Year: The year the car was manufactured\n'
-                '• Make: The car manufacturer (e.g., Toyota, Tesla, Volkswagen)\n'
-                '• Model: The specific model (e.g., Corolla, Model 3, Jetta)\n'
+                '• Make: The car manufacturer (e.g., Toyota, Tesla)\n'
+                '• Model: The specific model (e.g., Corolla, Model 3)\n'
                 '• Price: The selling price in dollars\n'
                 '• Kilometers: Total distance driven\n\n'
-                'Click Submit to save the car listing or Update to save changes.',
+                'Click Submit to save the listing or Update to save changes.',
           ),
         ),
         actions: [
@@ -227,26 +246,26 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Only show AppBar if not embedded
-        appBar: widget.isEmbedded ? null : AppBar(
-          title: Text(_isNewCar ? 'Add New Car' : 'Edit Car'),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.help_outline),
-              onPressed: _showHelpDialog,
-              tooltip: 'Instructions',
-            ),
-          ],
-        ),
+      // Only show AppBar if not in embedded (tablet) mode
+      appBar: widget.isEmbedded ? null : AppBar(
+        title: Text(_isNewCar ? 'Add New Car' : 'Edit Car'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline),
+            onPressed: _showHelpDialog,
+            tooltip: 'Instructions',
+          ),
+        ],
+      ),
 
-        body: Form(
-            key: _formKey,
-            child: ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: [
-              // Year Field
-              TextFormField(
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16.0),
+          children: [
+            // Year Field
+            TextFormField(
               controller: _yearController,
               decoration: const InputDecoration(
                 labelText: 'Year of Manufacture',
@@ -273,7 +292,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
               controller: _makeController,
               decoration: const InputDecoration(
                 labelText: 'Make',
-                hintText: 'e.g., Toyota, Tesla, Volkswagen',
+                hintText: 'e.g., Toyota, Tesla',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.business),
               ),
@@ -293,7 +312,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
               controller: _modelController,
               decoration: const InputDecoration(
                 labelText: 'Model',
-                hintText: 'e.g., Corolla, Model 3, Jetta',
+                hintText: 'e.g., Corolla, Model 3',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.directions_car),
               ),
@@ -313,7 +332,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
               controller: _priceController,
               decoration: const InputDecoration(
                 labelText: 'Price',
-                hintText: 'Sale price in dollars',
+                hintText: 'Sale price',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.attach_money),
               ),
@@ -333,11 +352,11 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
             const SizedBox(height: 16),
 
             // Kilometers Field
-            TextFormField (
+            TextFormField(
               controller: _kilometersController,
-              decoration: InputDecoration(
-                labelText: LocalizationHelper.kilometers,
-                hintText: LocalizationHelper.kilometersHint,
+              decoration: const InputDecoration(
+                labelText: 'Kilometers',
+                hintText: 'Distance driven',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.speed),
               ),
@@ -354,68 +373,66 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
               },
             ),
 
-                const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-                // Action Buttons
-                if (_isNewCar)
-                // Submit Button (for new car)
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: _saveCar,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                      child: const Text(
-                        'Submit',
-                        style: TextStyle(fontSize: 18),
+            // Action Buttons
+            if (_isNewCar)
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: _saveCar,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  child: const Text(
+                    'Submit',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              )
+            else
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: _saveCar,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        child: const Text(
+                          'Update',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
                     ),
-                  )
-                else
-                // Update and Delete Buttons (for existing car)
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: _saveCar,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context).colorScheme.primary,
-                              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                            child: const Text(
-                              'Update',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: SizedBox(
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: _deleteCar,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              foregroundColor: Colors.white,
-                            ),
-                            child: const Text(
-                              'Delete',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
-              ],
-            ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: _deleteCar,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text(
+                          'Delete',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+          ],
         ),
+      ),
     );
   }
 }
